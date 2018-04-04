@@ -1,15 +1,20 @@
 package main;
 
+import java.util.ArrayList;
+
 public class DataFrame {
 	
-	private Colonne[] colonnes; // changer en tableau associatif
+	private String name;
+
+	private ArrayList<Colonne> colonnes; // changer en tableau associatif
 
     /**
      * Constructeur qui prend en entrée un tableau de colonnes
      *
      * @param Tableau de colonnes
      */
-	public DataFrame(Colonne[] colonnes){
+	public DataFrame(String name, ArrayList<Colonne> colonnes){
+		this.name = name;
 		this.colonnes = colonnes;
 	}
 	
@@ -23,22 +28,33 @@ public class DataFrame {
 		// Utilisation du future Parser...
 	}
 
-	public Colonne[] getColonnes() {
+	public ArrayList<Colonne> getColonnes() {
 		return colonnes;
 	}
 
-	public void setColonnes(Colonne[] colonnes) {
+	public void setColonnes(ArrayList<Colonne> colonnes) {
 		this.colonnes = colonnes;
 	}
 	
-	public void afficher(){
-		for (int i = 0; i < colonnes.length; i++){
-			Colonne colonneCourante = colonnes[i];
-			for (int j = 0; j < colonneCourante.getCellules().length; j++){
-				System.out.print(colonneCourante.getCellules()[j].getValue() + "\t");
-			}
-			System.out.println();
-		}
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+    /**
+     * Affiche tout le dataframe
+     *
+     */
+	public void afficherTout(){
+//		System.out.println("DataFrame : "+this.getName());
+//		for (int numLigne = 0; numLigne < colonnes.length; i++){
+//			Colonne colonneCourante = colonnes[i];
+//			System.out.print();
+//			System.out.println();
+//		}
 	}
 	
 }

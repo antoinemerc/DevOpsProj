@@ -1,14 +1,17 @@
 package main;
 
+import java.util.ArrayList;
+
 import com.sun.org.apache.bcel.internal.generic.Type;
 
 public class Colonne {
 	
 	private String label;
 	private Type type;
-	private Cellule[] cellules;
+	private ArrayList<Cellule> cellules;
+	private int nbLignes;
 
-	public Colonne(String label, Type type, Cellule[] cellules){
+	public Colonne(String label, Type type, ArrayList<Cellule> cellules){
 		this.label = label;
 		this.type = type;
 		this.cellules = cellules;
@@ -30,11 +33,11 @@ public class Colonne {
 		this.type = type;
 	}
 
-	public Cellule[] getCellules() {
+	public ArrayList<Cellule> getCellules() {
 		return cellules;
 	}
 
-	public void setCellules(Cellule[] cellules) {
+	public void setCellules(ArrayList<Cellule> cellules) {
 		this.cellules = cellules;
 	}
 	
