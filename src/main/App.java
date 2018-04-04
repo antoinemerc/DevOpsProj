@@ -16,12 +16,14 @@ public class App
         Cellule cellule01_01 = new Cellule<String>("Paris");
         Cellule cellule01_02 = new Cellule<Integer>(2241346);
         Cellule cellule02_01 = new Cellule<String>("Grenoble");
-        Cellule cellule02_02 = new Cellule<Integer>(300);
+        Cellule cellule02_02 = new Cellule<Integer>(664832);
 
         ArrayList<Cellule> cellules01 = new ArrayList<>();
         ArrayList<Cellule> cellules02 = new ArrayList<>();
         cellules01.add(cellule01_01);
+        cellules01.add(cellule01_02);
         cellules02.add(cellule02_01);
+        cellules02.add(cellule02_02);
         Colonne colonne01 = new Colonne("Ville", Type.getType("String"), cellules01);
         Colonne colonne02 = new Colonne("Population", Type.getType("Integer"), cellules02);
         

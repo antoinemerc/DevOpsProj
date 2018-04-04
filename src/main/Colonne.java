@@ -9,7 +9,6 @@ public class Colonne {
 	private String label;
 	private Type type;
 	private ArrayList<Cellule> cellules;
-	private int nbLignes;
 
 	public Colonne(String label, Type type, ArrayList<Cellule> cellules){
 		this.label = label;
