@@ -66,11 +66,12 @@ public class DataFrame {
 		}
 		System.out.println();
 		// Affichage des données
-		for (int numLigne = 0; numLigne < this.getNbLignes(); numLigne++){
+		for (int numLigne = 0; numLigne <= this.getNbLignes(); numLigne++){
 			// Affichage des lignes
 			System.out.print(numLigne+"\t\t");
-			for (int numColonne = 0; numColonne < this.getColonnes().size(); numColonne++){
-				System.out.print(colonnes.get(numLigne).getCellules().get(numColonne).getValue() + "\t\t");
+			for( Colonne c : this.getColonnes() )
+			{
+				System.out.print( c.getCellules().get( numLigne ).getValue() + "\t\t" );
 			}
 			System.out.println();
 		}
