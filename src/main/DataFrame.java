@@ -57,4 +57,40 @@ public class DataFrame {
 //		}
 	}
 	
+	
+	public int getSize()
+	{
+		int size = -1;
+		
+		for( Colonne c : this.getColonnes() )
+		{
+			if( c.getCellules().size() > size )
+				size = c.getCellules().size();
+		}
+		
+		return size;
+	}
+	
+	
+	public void selectLines( int start, int end )
+	{
+		// Il faut ajouter le cas où ça dépasse la fin : || end > this.getSize()
+		if( start < 0 )
+		{
+			throw new IndexOutOfBoundsException();
+		}
+		else
+		{
+			for( int i = start; i <= end; i++ )
+			{
+				for( Colonne c : this.getColonnes() )
+				{
+					//try-
+					if( c.getCellules().get( i ) != null )
+						System.out.println( c.getCellules().get( i ).getValue() );
+				}
+			}
+		}
+	}
+	
 }

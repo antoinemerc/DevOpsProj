@@ -31,5 +31,7 @@ public class App
         DataFrame dataFrame = new DataFrame("Population des villes de France", colonnes);
         
         dataFrame.afficherTout();
+        dataFrame.getSize();
+        dataFrame.selectLines( 0, 1 );
     }
 }
