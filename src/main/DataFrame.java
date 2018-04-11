@@ -72,6 +72,7 @@ public class DataFrame {
 	
 	/***
 	 * Affichage des labels des colonnes de la DataFrame
+	 * Affichage uniquement des labels compris dans les indices start et end
 	 */
 	public void afficherLabels(int start, int end )
 	{
@@ -82,6 +83,28 @@ public class DataFrame {
 		{
 			afficher( this.getColonnes().get( i ).getLabel() + "", 5 );
 			afficherTab();
+		}
+		System.out.print( "\n" );
+		System.out.print( "----------------------------------------------------------------------\n" );
+	}
+	
+	/***
+	 * Affichage des labels des colonnes de la DataFrame
+	 * Affichage uniquement des colonnes passées en paramètre
+	 */
+	public void afficherLabels( String... arg )
+	{
+		System.out.println("DataFrame : "+this.getName());
+		System.out.println();
+		System.out.print("Ligne\t\t");
+		for( String c : arg )
+		{
+			Colonne col = this.getColonneByName(c);
+			if( col != null )
+			{
+				afficher( col.getLabel() + "", 5 );
+				afficherTab();
+			}
 		}
 		System.out.print( "\n" );
 		System.out.print( "----------------------------------------------------------------------\n" );
@@ -134,8 +157,9 @@ public class DataFrame {
 	
 	
 	/***
-	 * Fonction pour séléctionner des lignes dans le DataFrame
-	 * @param start
+	 * Fonction pour séléctionner et afficher des lignes dans le DataFrame
+	 * Affichage à partir des indices des lignes
+	 * @param start 
 	 * @param end
 	 */
 	public void selectLignes( int start, int end )
@@ -144,6 +168,10 @@ public class DataFrame {
 		if( start < 0 || end > this.getSize() )
 		{
 			throw new IndexOutOfBoundsException();
+		}
+		else if( start > end )
+		{
+			System.out.println( "Error SelectLignes: L'indice de début ne peut pas dépasser l'indice de fin" );
 		}
 		else
 		{
@@ -162,7 +190,8 @@ public class DataFrame {
 	}
 	
 	/***
-	 * Fonction pour sélectionner les colonnes
+	 * Fonction pour sélectionner et afficher les colonnes
+	 * Affichage des colonnes à partir des indices des colonnes
 	 * @param start
 	 * @param end
 	 */
@@ -171,6 +200,10 @@ public class DataFrame {
 		if( start < 0 || end > this.getSizeColonnes() )
 		{
 			throw new IndexOutOfBoundsException();
+		}
+		else if( start > end )
+		{
+			System.out.println( "Error SelectLignes: L'indice de début ne peut pas dépasser l'indice de fin" );
 		}
 		else
 		{
@@ -189,6 +222,45 @@ public class DataFrame {
 		}
 	}
 	
+	/***
+	 * Fonction pour sélectioner et afficher les colonnes
+	 * Affichage des colonnes à partir du nom de chaque colonne
+	 * @param args
+	 */
+	public void selectColonnes( String... args )
+	{
+		Colonne colonne;
+		afficherLabels( args );
+		for( int i = 0; i < this.getSize(); i++ )
+		{
+			System.out.print( i + "\t\t" );
+			for( String s : args )
+			{
+				colonne = this.getColonneByName( s );
+				if( colonne != null )
+				{
+					afficher( colonne.getCellules().get( i ).getValue() + "", 5 );
+					afficherTab();
+				}
+			}
+			System.out.println();
+		}
+	}
+	
+	/***
+	 * Fonction pour récupérer une colonne à partir de son nom
+	 * @param sString le nom de la colonne
+	 * @return Null si la colonne n'existe pas ou l'objet de type Colonne
+	 */
+	public Colonne getColonneByName( String s )
+	{
+		for( Colonne c : this.getColonnes() )
+		{
+			if( c.getLabel().toLowerCase().equals( s.toLowerCase() ) )
+				return c;
+		}
+		return null;
+	}
 	
 	/***
 	 * Afficher Tabulations

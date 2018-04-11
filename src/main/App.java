@@ -43,7 +43,8 @@ public class App
         //System.out.println( dataFrame.getSizeColonnes() );
         System.out.println();
         System.out.println();
-        dataFrame.selectColonnes( 0, 2 );
-        dataFrame.selectLignes( 0, 2 );
+        dataFrame.selectColonnes( "pays", "départem" );
+        //dataFrame.selectColonnes( 0, 2 );
+        //dataFrame.selectLignes( 4, 2 );
     }
 }
