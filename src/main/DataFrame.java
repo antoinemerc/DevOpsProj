@@ -29,7 +29,9 @@ public class DataFrame {
      * @param String - nom du fichier CSV
      */
 	public DataFrame(String csv){
-		// Utilisation du future Parser...
+		ParserCsv parsing = new ParserCsv(this, csv);
+		this.name = parsing.getName();
+		this.colonnes = parsing.getAllColumn();
 	}
 
 	public ArrayList<Colonne> getColonnes() {
