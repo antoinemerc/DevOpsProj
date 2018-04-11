@@ -3,9 +3,10 @@ package main;
 import java.util.ArrayList;
 
 import com.sun.org.apache.bcel.internal.generic.Type;
-
 import exceptions.ColonneNonCalculableException;
 import exceptions.ColonneNonTrouveeException;
+import exceptions.IndiceDataFrameIncorrectException;
+import exceptions.IndiceDebutTropGrandException;
 
 public class DataFrame {
 	
@@ -42,9 +43,9 @@ public class DataFrame {
      * @param String - nom du fichier CSV
      */
 	public DataFrame(String csv){
-		ParserCsv parsing = new ParserCsv(this, csv);
+		/*ParserCsv parsing = new ParserCsv(this, csv);
 		this.name = parsing.getName();
-		this.colonnes = parsing.getAllColumn();
+		this.colonnes = parsing.getAllColumn();*/
 	}
 
 	public ArrayList<Colonne> getColonnes() {
@@ -176,31 +177,80 @@ public class DataFrame {
 	 * @param start L'indice de départ
 	 * @param end L'indice de fin
 	 * @return Data Frame avec les lignes sélectionnées
+	 * @throws IndiceDataFrameIncorrectException 
+	 * @throws IndiceDebutTropGrandException 
 	 */
-	public DataFrame selectLignes( int start, int end )
+	public DataFrame selectLignes( int start, int end ) throws IndiceDataFrameIncorrectException, IndiceDebutTropGrandException
 	{
 		DataFrame df = new DataFrame();
-		df.setName( this.getName() + " - lignes " + start + ", " + end );
-		// Ajouter les colonnes au data frame avec les mêmes labels
-		for( Colonne c : this.getColonnes() )
+		if( start < 0 || end > this.getSize() )
+			throw new IndiceDataFrameIncorrectException();
+		else if( start > end )
+			throw new IndiceDebutTropGrandException();
+		else
 		{
-			Colonne t = new Colonne( c.getLabel(), c.getType() );
-			for( int i = start; i <= end; i++ )
+			df.setName( this.getName() + " - lignes " + start + ", " + end );
+			// Ajouter les colonnes au data frame avec les mêmes labels
+			for( Colonne c : this.getColonnes() )
 			{
-				t.getCellules().add( c.getCellules().get( i ) );
+				Colonne t = new Colonne( c.getLabel(), c.getType() );
+				for( int i = start; i <= end; i++ )
+				{
+					t.getCellules().add( c.getCellules().get( i ) );
+				}
+				df.getColonnes().add( t );
 			}
-			df.getColonnes().add( t );
 		}
+		return df;
+		
+	}
+	
+	/***
+	 * Permet de sélectionner des colonnes dans une data frame à partir du nom des colonnes passées en paramètre
+	 * @param arg La liste de noms de colonnes à sélectionner
+	 * @return Une nouvelle Data Frame avec les colonnes sélectionnées
+	 * @throws Exception
+	 */
+	public DataFrame selectColonnes( String... arg ) throws Exception
+	{
+		DataFrame df = new DataFrame();
+		df.setName( "Partial Data Frame of " + this.getName() );
+		
+		for( String s : arg )
+		{
+			Colonne c = getColonne( s );
+			if( c != null )
+				df.getColonnes().add( c );
+		}
+		
 		return df;
 	}
 	
-	
-	public DataFrame selectColonnes( String... arg )
+	/***
+	 * Fonction pour sélectionner les colonnes d'une Data Frame à partir de son indice
+	 * @param start
+	 * @param end
+	 * @return
+	 * @throws IndiceDataFrameIncorrectException
+	 * @throws IndiceDebutTropGrandException
+	 */
+	public DataFrame selectColonnes( int start, int end ) throws IndiceDataFrameIncorrectException, IndiceDebutTropGrandException
 	{
 		DataFrame df = new DataFrame();
-		df.setName( "Partial DF" + this.getName() );
+		if( start < 0 || end > this.getSize() )
+			throw new IndiceDataFrameIncorrectException();
+		else if( start > end )
+			throw new IndiceDebutTropGrandException();
+		else 
+		{
+			df.setName( this.getName() + " - colonnes " + start + ", " + end );
+			for( int i = start; i <= end; i++ )
+			{
+				Colonne c = this.getColonnes().get( i );
+				df.getColonnes().add( c );
+			}
+		}
 		return df;
-		
 	}
 	
 	
@@ -214,18 +264,16 @@ public class DataFrame {
 	 * Les lignes affichées sont celles comprises dansintervalle passé en paramètres
 	 * @param start
 	 * @param end
+	 * @throws IndiceDataFrameIncorrectException 
+	 * @throws IndiceDebutTropGrandException 
 	 */
-	public void afficherLignes( int start, int end )
+	public void afficherLignes( int start, int end ) throws IndiceDataFrameIncorrectException, IndiceDebutTropGrandException
 	{
 		// On vérifie que les indices existent dans le DataFrame
 		if( start < 0 || end > this.getSize() )
-		{
-			throw new IndexOutOfBoundsException();
-		}
+			throw new IndiceDataFrameIncorrectException();
 		else if( start > end )
-		{
-			System.out.println( "Error selection de lignes: L'indice de début ne peut pas dépasser l'indice de fin" );
-		}
+			throw new IndiceDebutTropGrandException();
 		else
 		{
 			afficherLabels();
@@ -247,17 +295,15 @@ public class DataFrame {
 	 * Affichage des colonnes à partir des indices des colonnes
 	 * @param start
 	 * @param end
+	 * @throws IndiceDataFrameIncorrectException 
+	 * @throws IndiceDebutTropGrandException 
 	 */
-	public void afficherColonnes( int start, int end )
+	public void afficherColonnes( int start, int end ) throws IndiceDataFrameIncorrectException, IndiceDebutTropGrandException
 	{
 		if( start < 0 || end > this.getSizeColonnes() )
-		{
-			throw new IndexOutOfBoundsException();
-		}
+			throw new IndiceDataFrameIncorrectException();
 		else if( start > end )
-		{
-			System.out.println( "Error SelectLignes: L'indice de début ne peut pas dépasser l'indice de fin" );
-		}
+			throw new IndiceDebutTropGrandException();
 		else
 		{
 			afficherLabels( start, end );
@@ -300,6 +346,50 @@ public class DataFrame {
 		}
 	}
 	
+	/***
+	 * Permet d'afficher les 4 premières lignes de la Data Frame
+	 * @throws IndiceDataFrameIncorrectException
+	 * @throws IndiceDebutTropGrandException
+	 */
+	public void afficherPremieresLignes() throws IndiceDataFrameIncorrectException, IndiceDebutTropGrandException
+	{
+		int size = this.getSize();
+		if( size < 4 )
+			this.afficherLignes( 0, size - 1 );
+		else
+			this.afficherLignes( 0, 3 );
+	}
+	
+	/***
+	 * Fonction pour afficher les premières lignes d'une Data Frame
+	 * Cette fonction permet de sélectionner le nombre de ligne qu'on veut
+	 * @param nb_lignes
+	 * @throws IndiceDataFrameIncorrectException
+	 * @throws IndiceDebutTropGrandException
+	 */
+	public void afficherPremieresLignes( int nb_lignes ) throws IndiceDataFrameIncorrectException, IndiceDebutTropGrandException
+	{
+		if( nb_lignes <= 0 )
+			throw new IndiceDataFrameIncorrectException();
+		else
+			this.afficherLignes(0, nb_lignes - 1 );
+	}
+	
+	/***
+	 * Affiche les 3 dernières lignes de la Data Frame
+	 * @throws IndiceDataFrameIncorrectException
+	 * @throws IndiceDebutTropGrandException
+	 */
+	public void afficherDernieresLignes() throws IndiceDataFrameIncorrectException, IndiceDebutTropGrandException
+	{
+		int size = this.getSize();
+		if( size < 4 )
+			this.afficherLignes( 0, size - 1 );
+		else
+			this.afficherLignes( size - 3, size - 1 );
+	}
+	
+	
 	
 	/***
 	 * Afficher Tabulations
@@ -331,7 +421,7 @@ public class DataFrame {
      */
 	public Colonne getColonne(String label) throws Exception{
 		for (int i = 0; i < this.getColonnes().size(); i++){
-			if (this.getColonnes().get(i).getLabel().equals(label)){
+			if (this.getColonnes().get(i).getLabel().toLowerCase().equals(label.toLowerCase())){
 				return this.getColonnes().get(i);
 			}
 		}

@@ -1,5 +1,6 @@
 package main;
 
+import java.nio.channels.SelectableChannel;
 import java.util.ArrayList;
 
 import com.sun.org.apache.bcel.internal.generic.Type;
@@ -11,7 +12,7 @@ import com.sun.org.apache.bcel.internal.generic.Type;
 public class App 
 {
 	
-	public static int executionMode = 0;
+	public static int executionMode = 1;
 	
     public static void main( String[] args ) throws Exception
     {
@@ -51,6 +52,9 @@ public class App
 	        colonne03.add(new Cellule<String>("Isère"));
 	        
 	        dataFrame.afficherTout();
+	        dataFrame.afficherPremieresLignes();
+	        dataFrame.selectLignes(0, 4).afficherDernieresLignes();
+	        
 	        System.out.println("Moyenne des populations : " + dataFrame.calculerMoyenne("Population"));
 	        System.out.println("Population minimale : " + dataFrame.calculerMinimum("Population"));
 	        System.out.println("Population maximale : " + dataFrame.calculerMaximum("Population"));
