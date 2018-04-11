@@ -40,7 +40,5 @@ public class App
         colonne03.add(new Cellule<String>("Loire"));
         
         dataFrame.afficherTout();
-        
-        System.out.println("Moyenne des populations : " + dataFrame.calculerMoyenne("Population"));
     }
 }

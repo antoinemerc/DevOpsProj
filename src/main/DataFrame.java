@@ -58,30 +58,149 @@ public class DataFrame {
 		this.nbLignes = nbLignes;
 	}
 	
+	/***
+	 * Affichage des labels des colonnes de la DataFrame
+	 */
+	public void afficherLabels()
+	{
+		System.out.println("DataFrame : "+this.getName());
+		System.out.println();
+		System.out.print("Ligne\t\t");
+		for( Colonne c : this.getColonnes() )
+		{
+			afficher( c.getLabel() + "", 5 );
+			afficherTab();
+		}
+		System.out.print( "\n" );
+		System.out.print( "-----------------------------------------------------------------------------\n" );
+	}
+	
+	/***
+	 * Affichage des labels des colonnes de la DataFrame
+	 */
+	public void afficherLabels(int start, int end )
+	{
+		System.out.println("DataFrame : "+this.getName());
+		System.out.println();
+		System.out.print("Ligne\t\t");
+		for( int i = start; i < end; i++  )
+		{
+			afficher( this.getColonnes().get( i ).getLabel() + "", 5 );
+			afficherTab();
+		}
+		System.out.print( "\n" );
+		System.out.print( "----------------------------------------------------------------------\n" );
+	}
+	
     /**
      * Affiche tout le dataframe
      *
      */
 	public void afficherTout(){
-		System.out.println("DataFrame : "+this.getName());
-		// Affichage des labels
-		System.out.print("Ligne \t\t");
-		for (int numColonne = 0; numColonne < this.getColonnes().size(); numColonne++){
-			afficher(colonnes.get(numColonne).getLabel(), 5);
-			System.out.print("\t\t");
+        afficherLabels();
+        // Affichage des données
+        for (int numLigne = 0; numLigne <= this.getNbLignes(); numLigne++){
+            // Affichage des lignes
+            System.out.print(numLigne+"\t\t");
+            for( Colonne c : this.getColonnes() )
+            {
+                afficher( c.getCellules().get( numLigne ).getValue() + "", 5 );
+                afficherTab();
+            }
+            System.out.println();
+        }
+    }
+
+	/***
+	 * Fonction pour calculer le nombre des lignes du DataFrame
+	 * @return
+	 */
+	public int getSize()
+	{
+		int size = -1;
+		
+		for( Colonne c : this.getColonnes() )
+		{
+			if( c.getCellules().size() > size )
+				size = c.getCellules().size();
 		}
-		System.out.println();
-		// Affichage des données
-		for (int numLigne = 0; numLigne <= this.getNbLignes(); numLigne++){
-			// Affichage des lignes
-			System.out.print(numLigne+"\t\t");
-			for( Colonne c : this.getColonnes() )
+		
+		return size;
+	}
+	
+	/***
+	 * Fonction pour calculer le nombre de colonnes du DataFrale
+	 * @return
+	 */
+	public int getSizeColonnes()
+	{	
+		return this.getColonnes().size();
+	}
+	
+	
+	/***
+	 * Fonction pour séléctionner des lignes dans le DataFrame
+	 * @param start
+	 * @param end
+	 */
+	public void selectLignes( int start, int end )
+	{
+		// On vérifie que les indices existent dans le DataFrame
+		if( start < 0 || end > this.getSize() )
+		{
+			throw new IndexOutOfBoundsException();
+		}
+		else
+		{
+			afficherLabels();
+			for( int i = start; i <= end; i++ )
 			{
-				afficher( c.getCellules().get( numLigne ).getValue().toString(),5);
-				System.out.print("\t\t");
+				System.out.print( i + "\t\t");
+				for( Colonne c : this.getColonnes() )
+				{
+					afficher( c.getCellules().get( i ).getValue() + "", 5 );
+					afficherTab();
+				}
+				System.out.print("\n");
 			}
-			System.out.println();
 		}
+	}
+	
+	/***
+	 * Fonction pour sélectionner les colonnes
+	 * @param start
+	 * @param end
+	 */
+	public void selectColonnes( int start, int end )
+	{
+		if( start < 0 || end > this.getSizeColonnes() )
+		{
+			throw new IndexOutOfBoundsException();
+		}
+		else
+		{
+			afficherLabels( start, end );
+			for( int i = 0; i < this.getSize(); i++ )
+			{
+				System.out.print( i + "\t\t" );
+				//System.out.print( this.getColonnes().get( i ).getLabel() );
+				for( int j = start; j < end; j++ )
+				{
+					afficher( this.getColonnes().get(j).getCellules().get(i).getValue() + "", 5);
+					afficherTab();
+				}
+				System.out.print("\n");
+			}
+		}
+	}
+	
+	
+	/***
+	 * Afficher Tabulations
+	 */
+	public void afficherTab()
+	{
+		System.out.print( "\t\t" );
 	}
 	
     /**
