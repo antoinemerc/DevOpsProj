@@ -10,11 +10,31 @@ public class Colonne {
 	private Type type;
 	private ArrayList<Cellule> cellules;
 
+	/***
+	 * 
+	 * @param label
+	 * @param type
+	 */
+	public Colonne( String label, Type type ) 
+	{
+		this.setLabel( label );
+		this.setType( type );
+		this.setCellules( new ArrayList<Cellule>() );
+	}
+	
+	/***
+	 * 
+	 * @param label
+	 * @param type
+	 * @param cellules
+	 */
 	public Colonne(String label, Type type, ArrayList<Cellule> cellules){
 		this.label = label;
 		this.type = type;
 		this.cellules = cellules;
 	}
+
+	
 
 	public String getLabel() {
 		return label;

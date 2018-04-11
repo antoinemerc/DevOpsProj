@@ -10,7 +10,7 @@ import com.sun.org.apache.bcel.internal.generic.Type;
  */
 public class App 
 {
-    public static void main( String[] args )
+    public static void main( String[] args ) throws Exception
     {
         // Premier DataFrame de test avec le 1er constructeur
     	ArrayList<Cellule> colonne01 = new ArrayList<>();
@@ -28,23 +28,33 @@ public class App
         colonne01.add(new Cellule<String>("Grenoble"));
         colonne01.add(new Cellule<String>("Lyon"));
         colonne01.add(new Cellule<String>("Saint-Etienne"));
+        colonne01.add(new Cellule<String>("Meylan"));
 
         colonne02.add(new Cellule<Integer>(2241346));
         colonne02.add(new Cellule<Integer>(664832));
         colonne02.add(new Cellule<Integer>(2265375));
         colonne02.add(new Cellule<Integer>(172023));
+        colonne02.add(new Cellule<Integer>(null));
         
         colonne03.add(new Cellule<String>("Paris(dept)"));
         colonne03.add(new Cellule<String>("Isère"));
         colonne03.add(new Cellule<String>("Rhône"));
         colonne03.add(new Cellule<String>("Loire"));
+        colonne03.add(new Cellule<String>("Isère"));
         
         dataFrame.afficherTout();
         //System.out.println( dataFrame.getSizeColonnes() );
         System.out.println();
         System.out.println();
-        dataFrame.selectColonnes( "pays", "départem" );
+        //dataFrame.selectColonnes( "pays", "départem" );
         //dataFrame.selectColonnes( 0, 2 );
-        //dataFrame.selectLignes( 4, 2 );
+        dataFrame.afficherLignes(0, 2);
+        System.out.println();
+        DataFrame hey = dataFrame.selectLignes( 0, 2 );
+        hey.afficherTout();
+        //newData.afficherTout();
+        //System.out.println("Moyenne des populations : " + dataFrame.calculerMoyenne("Population"));
+        //System.out.println("Population minimale : " + dataFrame.calculerMinimum("Population"));
+        //System.out.println("Population maximale : " + dataFrame.calculerMaximum("Population"));
     }
 }
