@@ -10,7 +10,7 @@ import com.sun.org.apache.bcel.internal.generic.Type;
  */
 public class App 
 {
-    public static void main( String[] args )
+    public static void main( String[] args ) throws Exception
     {
         // Premier DataFrame de test avec le 1er constructeur
     	ArrayList<Cellule> colonne01 = new ArrayList<>();
@@ -40,5 +40,7 @@ public class App
         colonne03.add(new Cellule<String>("Loire"));
         
         dataFrame.afficherTout();
+        
+        System.out.println("Moyenne des populations : " + dataFrame.calculerMoyenne("Population"));
     }
 }

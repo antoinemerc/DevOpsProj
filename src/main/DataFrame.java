@@ -2,6 +2,11 @@ package main;
 
 import java.util.ArrayList;
 
+import com.sun.org.apache.bcel.internal.generic.Type;
+
+import exceptions.ColonneNonCalculableException;
+import exceptions.ColonneNonTrouveeException;
+
 public class DataFrame {
 	
 	private String name;
@@ -90,6 +95,48 @@ public class DataFrame {
 		if (msg.length() > limit){
 			System.out.print("..");
 		}
+	}
+	
+    /**
+     * Fonction qui retourne la colonne du label donné en paramètre
+     *
+     * @param label Nom de la colonne à retourner
+     * @throws ColonneNonTrouveeException Si aucune colonne correspond au label donné
+     */
+	public Colonne getColonne(String label) throws Exception{
+		for (int i = 0; i < this.getColonnes().size(); i++){
+			if (this.getColonnes().get(i).getLabel().equals(label)){
+				return this.getColonnes().get(i);
+			}
+		}
+		throw new ColonneNonTrouveeException("Colonne non trouvé");
+	}
+	
+    /**
+     * Fonction qui calcule la moyenne des valeurs d'une colonne
+     *
+     * @param msg Message à afficher
+     * @param limit Nombre de caractères maximale à afficher
+     * @throws ColonneNonTrouveeException Si le label donné en paramètre ne correspond
+     * à aucune colonne
+     * @throws ColonneNonCalculableException Si la colonne n'est pas calculable,
+     * c'est-à-dire si elle n'est ni de type Int, ni de type Float
+     */
+	public float calculerMoyenne(String colonneLabel) throws Exception {
+		Colonne colonne = this.getColonne(colonneLabel);
+		
+		Type type = colonne.getType();
+		if (type != Type.FLOAT && type != Type.INT){
+			throw new ColonneNonCalculableException(colonneLabel, type);
+		}
+
+		Float somme = 0f;
+		int nbElements = 0;
+		
+		for (int i = 0; i < colonne.getCellules().size(); i++, nbElements++){
+			somme += Float.valueOf(colonne.getCellules().get(i).getValue().toString());
+		}
+		return somme/nbElements;
 	}
 	
 }
