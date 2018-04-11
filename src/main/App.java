@@ -16,7 +16,7 @@ public class App
     public static void main( String[] args ) throws Exception
     {
     	if(executionMode == 0){
-			DataFrame df = new DataFrame("/home/m/merciant/workspace/PandaJava/test.csv");
+			DataFrame df = new DataFrame("test.csv");
 	    	df.afficherTout();
     	}else{
     	

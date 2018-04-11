@@ -115,6 +115,8 @@ public class ParserCsv {
 			for(int j = 0; j < this.nbrLine; j++){
 				if(typeColumn == Type.INT)
 					cellsList.add(new Cellule<Integer>(Integer.parseInt(this.contentLine.get(j)[i])));
+				if(typeColumn == Type.DOUBLE)
+					cellsList.add(new Cellule<Double>(Double.parseDouble(this.contentLine.get(j)[i])));
 				else if(typeColumn == Type.STRING)
 					cellsList.add(new Cellule<String>(this.contentLine.get(j)[i]));
 				
@@ -148,8 +150,8 @@ public class ParserCsv {
 						break;
 					case 1:
 						it++;
-						float testDouble = Float.parseFloat(value);
-						ret = Type.FLOAT;
+						double testDouble = Double.parseDouble(value);
+						ret = Type.DOUBLE;
 						done = true;
 						break;
 					default:
