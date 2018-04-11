@@ -42,7 +42,9 @@ public class DataFrame {
      * @param String - nom du fichier CSV
      */
 	public DataFrame(String csv){
-		// Utilisation du future Parser...
+		ParserCsv parsing = new ParserCsv(this, csv);
+		this.name = parsing.getName();
+		this.colonnes = parsing.getAllColumn();
 	}
 
 	public ArrayList<Colonne> getColonnes() {
@@ -357,9 +359,11 @@ public class DataFrame {
 		Float somme = 0f;
 		int nbElements = 0;
 		
-		for (int i = 0; i < colonne.getCellules().size(); i++, nbElements++){
-			if (colonne.getCellules().get(i).getValue() != null)
+		for (int i = 0; i < colonne.getCellules().size(); i++){
+			if (colonne.getCellules().get(i).getValue() != null){
 				somme += Float.valueOf(colonne.getCellules().get(i).getValue().toString());
+				nbElements++;
+			}
 		}
 		return somme/nbElements;
 	}
