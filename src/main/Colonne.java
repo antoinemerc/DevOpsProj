@@ -40,4 +40,22 @@ public class Colonne {
 		this.cellules = cellules;
 	}
 	
+	public boolean equals(Object obj){
+		if (obj == null || getClass() != obj.getClass()){
+			return false;
+		}
+		Colonne cellule2 = (Colonne)obj;
+		if (!this.getLabel().equals(cellule2.getLabel())){
+			return false;
+		}
+		if (!this.getType().equals(cellule2.getType())){
+			return false;
+		}
+		if (!this.getCellules().equals(cellule2.getCellules())){
+			return false;
+		}
+		return true;
+	}
+	
+	
 }

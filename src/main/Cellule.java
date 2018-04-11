@@ -16,4 +16,15 @@ public class Cellule<E> {
 		this.value = value;
 	}
 	
+	public boolean equals(Object obj){
+		if (obj == null || getClass() != obj.getClass()){
+			return false;
+		}
+		Cellule cellule2 = (Cellule)obj;
+		if (this.getValue().equals(cellule2.getValue())){
+			return true;
+		}
+		return false;
+	}
+	
 }
