@@ -28,16 +28,19 @@ public class App
         colonne01.add(new Cellule<String>("Grenoble"));
         colonne01.add(new Cellule<String>("Lyon"));
         colonne01.add(new Cellule<String>("Saint-Etienne"));
+        colonne01.add(new Cellule<String>("Meylan"));
 
         colonne02.add(new Cellule<Integer>(2241346));
         colonne02.add(new Cellule<Integer>(664832));
         colonne02.add(new Cellule<Integer>(2265375));
         colonne02.add(new Cellule<Integer>(172023));
+        colonne02.add(new Cellule<Integer>(null));
         
         colonne03.add(new Cellule<String>("Paris(dept)"));
         colonne03.add(new Cellule<String>("Isère"));
         colonne03.add(new Cellule<String>("Rhône"));
         colonne03.add(new Cellule<String>("Loire"));
+        colonne03.add(new Cellule<String>("Isère"));
         
         dataFrame.afficherTout();
         System.out.println("Moyenne des populations : " + dataFrame.calculerMoyenne("Population"));

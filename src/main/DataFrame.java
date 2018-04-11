@@ -11,7 +11,6 @@ public class DataFrame {
 	
 	private String name;
 	private ArrayList<Colonne> colonnes;
-	private int nbLignes;
 
     /**
      * Constructeur qui prend en entrée un tableau de colonnes
@@ -21,7 +20,6 @@ public class DataFrame {
 	public DataFrame(String name, ArrayList<Colonne> colonnes){
 		this.name = name;
 		this.colonnes = colonnes;
-		this.nbLignes = colonnes.size();
 	}
 
 	/**
@@ -51,11 +49,7 @@ public class DataFrame {
 	}
 	
     public int getNbLignes() {
-		return nbLignes;
-	}
-
-	public void setNbLignes(int nbLignes) {
-		this.nbLignes = nbLignes;
+		return getColonnes().get(0).getCellules().size();
 	}
 	
 	/***
@@ -99,7 +93,7 @@ public class DataFrame {
 	public void afficherTout(){
         afficherLabels();
         // Affichage des données
-        for (int numLigne = 0; numLigne <= this.getNbLignes(); numLigne++){
+        for (int numLigne = 0; numLigne < this.getNbLignes(); numLigne++){
             // Affichage des lignes
             System.out.print(numLigne+"\t\t");
             for( Colonne c : this.getColonnes() )
@@ -229,7 +223,7 @@ public class DataFrame {
 				return this.getColonnes().get(i);
 			}
 		}
-		throw new ColonneNonTrouveeException("Colonne non trouvé");
+		throw new ColonneNonTrouveeException(label);
 	}
 	
     /**
@@ -254,7 +248,8 @@ public class DataFrame {
 		int nbElements = 0;
 		
 		for (int i = 0; i < colonne.getCellules().size(); i++, nbElements++){
-			somme += Float.valueOf(colonne.getCellules().get(i).getValue().toString());
+			if (colonne.getCellules().get(i).getValue() != null)
+				somme += Float.valueOf(colonne.getCellules().get(i).getValue().toString());
 		}
 		return somme/nbElements;
 	}
@@ -265,7 +260,7 @@ public class DataFrame {
      * @param colonneLabel Nom de la colonne à calculer
      * @throws ColonneNonTrouveeException Si le label donné en paramètre ne correspond
      * à aucune colonne
-     * @throws ColonneNonCalculableException Si la colonne n'est pas calculable,
+     * @throws ColonneNonCalculableExceptinullon Si la colonne n'est pas calculable,
      * c'est-à-dire si elle n'est ni de type int, ni de type Float
      * @return Minimum des valeurs de la colonne au label passé en paramètre
      */
@@ -280,7 +275,7 @@ public class DataFrame {
 		Float min = Float.MAX_VALUE;
 		
 		for (int i = 0; i < colonne.getCellules().size(); i++){
-			if (min > Float.valueOf(colonne.getCellules().get(i).getValue().toString())){
+			if (colonne.getCellules().get(i).getValue() != null && min > Float.valueOf(colonne.getCellules().get(i).getValue().toString())){
 				min = Float.valueOf(colonne.getCellules().get(i).getValue().toString());
 			}
 		}
@@ -308,7 +303,7 @@ public class DataFrame {
 		Float max = 0f;
 		
 		for (int i = 0; i < colonne.getCellules().size(); i++){
-			if (max < Float.valueOf(colonne.getCellules().get(i).getValue().toString())){
+			if (colonne.getCellules().get(i).getValue() != null && max < Float.valueOf(colonne.getCellules().get(i).getValue().toString())){
 				max = Float.valueOf(colonne.getCellules().get(i).getValue().toString());
 			}
 		}
