@@ -53,30 +53,60 @@ public class DataFrame {
 		this.nbLignes = nbLignes;
 	}
 	
+	/***
+	 * Affichage des labels des colonnes de la DataFrame
+	 */
+	public void afficherLabels()
+	{
+		System.out.println("DataFrame : "+this.getName());
+		System.out.println();
+		System.out.print("Ligne\t\t");
+		for( Colonne c : this.getColonnes() )
+		{
+			System.out.print( c.getLabel() + "\t\t" );
+		}
+		System.out.print( "\n" );
+		System.out.print( "-----------------------------------------------------------------------------\n" );
+	}
+	
+	/***
+	 * Affichage des labels des colonnes de la DataFrame
+	 */
+	public void afficherLabels(int start, int end )
+	{
+		System.out.println("DataFrame : "+this.getName());
+		System.out.println();
+		System.out.print("Ligne\t\t");
+		for( int i = start; i < end; i++  )
+		{
+			System.out.print( this.getColonnes().get( i ).getLabel() + "\t\t" );
+		}
+		System.out.print( "\n" );
+		System.out.print( "----------------------------------------------------------------------\n" );
+	}
+	
     /**
      * Affiche tout le dataframe
      *
      */
 	public void afficherTout(){
-		System.out.println("DataFrame : "+this.getName());
-		// Affichage des labels
-		System.out.print("Ligne \t\t");
-		for (int numColonne = 0; numColonne < this.getColonnes().size(); numColonne++){
-			System.out.print(colonnes.get(numColonne).getLabel() + "\t\t");
-		}
-		System.out.println();
-		// Affichage des données
-		for (int numLigne = 0; numLigne < this.getNbLignes(); numLigne++){
-			// Affichage des lignes
-			System.out.print(numLigne+"\t\t");
-			for (int numColonne = 0; numColonne < this.getColonnes().size(); numColonne++){
-				System.out.print(colonnes.get(numLigne).getCellules().get(numColonne).getValue() + "\t\t");
-			}
-			System.out.println();
-		}
-	}
-	
-	
+        afficherLabels();
+        // Affichage des données
+        for (int numLigne = 0; numLigne <= this.getNbLignes(); numLigne++){
+            // Affichage des lignes
+            System.out.print(numLigne+"\t\t");
+            for( Colonne c : this.getColonnes() )
+            {
+                System.out.print( c.getCellules().get( numLigne ).getValue() + "\t\t" );
+            }
+            System.out.println();
+        }
+    }
+
+	/***
+	 * Fonction pour calculer le nombre des lignes du DataFrame
+	 * @return
+	 */
 	public int getSize()
 	{
 		int size = -1;
@@ -90,24 +120,67 @@ public class DataFrame {
 		return size;
 	}
 	
+	/***
+	 * Fonction pour calculer le nombre de colonnes du DataFrale
+	 * @return
+	 */
+	public int getSizeColonnes()
+	{	
+		return this.getColonnes().size();
+	}
 	
-	public void selectLines( int start, int end )
+	
+	/***
+	 * Fonction pour séléctionner des lignes dans le DataFrame
+	 * @param start
+	 * @param end
+	 */
+	public void selectLignes( int start, int end )
 	{
-		// Il faut ajouter le cas où ça dépasse la fin : || end > this.getSize()
-		if( start < 0 )
+		// On vérifie que les indices existent dans le DataFrame
+		if( start < 0 || end > this.getSize() )
 		{
 			throw new IndexOutOfBoundsException();
 		}
 		else
 		{
+			afficherLabels();
 			for( int i = start; i <= end; i++ )
 			{
+				System.out.print( i + "\t\t");
 				for( Colonne c : this.getColonnes() )
 				{
-					//try-
-					if( c.getCellules().get( i ) != null )
-						System.out.println( c.getCellules().get( i ).getValue() );
+						System.out.print( c.getCellules().get( i ).getValue() + "\t\t" );
+					
 				}
+				System.out.print("\n");
+			}
+		}
+	}
+	
+	/***
+	 * Fonction pour sélectionner les colonnes
+	 * @param start
+	 * @param end
+	 */
+	public void selectColonnes( int start, int end )
+	{
+		if( start < 0 || end > this.getSizeColonnes() )
+		{
+			throw new IndexOutOfBoundsException();
+		}
+		else
+		{
+			afficherLabels( start, end );
+			for( int i = 0; i < this.getSize(); i++ )
+			{
+				System.out.print( i + "\t\t" );
+				//System.out.print( this.getColonnes().get( i ).getLabel() );
+				for( int j = start; j < end; j++ )
+				{
+					System.out.print( this.getColonnes().get(j).getCellules().get(i).getValue() + "\t\t");
+				}
+				System.out.print("\n");
 			}
 		}
 	}
