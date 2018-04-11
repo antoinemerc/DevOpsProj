@@ -41,5 +41,7 @@ public class App
         
         dataFrame.afficherTout();
         System.out.println("Moyenne des populations : " + dataFrame.calculerMoyenne("Population"));
+        System.out.println("Population minimale : " + dataFrame.calculerMinimum("Population"));
+        System.out.println("Population maximale : " + dataFrame.calculerMaximum("Population"));
     }
 }

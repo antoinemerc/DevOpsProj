@@ -221,6 +221,7 @@ public class DataFrame {
      *
      * @param label Nom de la colonne à retourner
      * @throws ColonneNonTrouveeException Si aucune colonne correspond au label donné
+     * @return Colonne au label donné en paramètre
      */
 	public Colonne getColonne(String label) throws Exception{
 		for (int i = 0; i < this.getColonnes().size(); i++){
@@ -234,12 +235,12 @@ public class DataFrame {
     /**
      * Fonction qui calcule la moyenne des valeurs d'une colonne
      *
-     * @param msg Message à afficher
-     * @param limit Nombre de caractères maximale à afficher
+     * @param colonneLabel Nom de la colonne à calculer
      * @throws ColonneNonTrouveeException Si le label donné en paramètre ne correspond
      * à aucune colonne
      * @throws ColonneNonCalculableException Si la colonne n'est pas calculable,
-     * c'est-à-dire si elle n'est ni de type Int, ni de type Float
+     * c'est-à-dire si elle n'est ni de type int, ni de type Float
+     * @return moyenne des valeurs de la colonne au label passé en paramètre
      */
 	public float calculerMoyenne(String colonneLabel) throws Exception {
 		Colonne colonne = this.getColonne(colonneLabel);
@@ -256,6 +257,62 @@ public class DataFrame {
 			somme += Float.valueOf(colonne.getCellules().get(i).getValue().toString());
 		}
 		return somme/nbElements;
+	}
+	
+    /**
+     * Fonction qui calcule le minimum des valeurs d'une colonne
+     *
+     * @param colonneLabel Nom de la colonne à calculer
+     * @throws ColonneNonTrouveeException Si le label donné en paramètre ne correspond
+     * à aucune colonne
+     * @throws ColonneNonCalculableException Si la colonne n'est pas calculable,
+     * c'est-à-dire si elle n'est ni de type int, ni de type Float
+     * @return Minimum des valeurs de la colonne au label passé en paramètre
+     */
+	public float calculerMinimum(String colonneLabel) throws Exception {
+		Colonne colonne = this.getColonne(colonneLabel);
+		
+		Type type = colonne.getType();
+		if (type != Type.FLOAT && type != Type.INT){
+			throw new ColonneNonCalculableException(colonneLabel, type);
+		}
+
+		Float min = Float.MAX_VALUE;
+		
+		for (int i = 0; i < colonne.getCellules().size(); i++){
+			if (min > Float.valueOf(colonne.getCellules().get(i).getValue().toString())){
+				min = Float.valueOf(colonne.getCellules().get(i).getValue().toString());
+			}
+		}
+		return min;
+	}
+	
+    /**
+     * Fonction qui calcule le maximum des valeurs d'une colonne
+     *
+     * @param colonneLabel Nom de la colonne à calculer
+     * @throws ColonneNonTrouveeException Si le label donné en paramètre ne correspond
+     * à aucune colonne
+     * @throws ColonneNonCalculableException Si la colonne n'est pas calculable,
+     * c'est-à-dire si elle n'est ni de type Int, ni de type Float
+     * @return Maximum des valeurs de la colonne au label passé en paramètre
+     */
+	public float calculerMaximum(String colonneLabel) throws Exception {
+		Colonne colonne = this.getColonne(colonneLabel);
+		
+		Type type = colonne.getType();
+		if (type != Type.FLOAT && type != Type.INT){
+			throw new ColonneNonCalculableException(colonneLabel, type);
+		}
+
+		Float max = 0f;
+		
+		for (int i = 0; i < colonne.getCellules().size(); i++){
+			if (max < Float.valueOf(colonne.getCellules().get(i).getValue().toString())){
+				max = Float.valueOf(colonne.getCellules().get(i).getValue().toString());
+			}
+		}
+		return max;
 	}
 	
 }
