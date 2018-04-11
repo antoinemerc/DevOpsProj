@@ -12,10 +12,10 @@ public class App
 {
     public static void main( String[] args )
     {
-    	// Premier DataFrame de test avec le 1er constructeur
-        ArrayList<Cellule> colonne01 = new ArrayList<>();
-        ArrayList<Cellule> colonne02 = new ArrayList<>();
-        ArrayList<Cellule> colonne03 = new ArrayList<>();
+        // Premier DataFrame de test avec le 1er constructeur
+    	ArrayList<Cellule> colonne01 = new ArrayList<>();
+    	ArrayList<Cellule> colonne02 = new ArrayList<>();
+    	ArrayList<Cellule> colonne03 = new ArrayList<>();
 
         ArrayList<Colonne> colonnes = new ArrayList<>();
         colonnes.add(new Colonne("Pays", Type.getType("String"), colonne01));
@@ -43,6 +43,7 @@ public class App
         //System.out.println( dataFrame.getSizeColonnes() );
         System.out.println();
         System.out.println();
-        dataFrame.selectColonnes( 0, 1 );
+        dataFrame.selectColonnes( 0, 2 );
+        dataFrame.selectLignes( 0, 2 );
     }
 }

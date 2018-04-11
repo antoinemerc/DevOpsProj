@@ -63,7 +63,8 @@ public class DataFrame {
 		System.out.print("Ligne\t\t");
 		for( Colonne c : this.getColonnes() )
 		{
-			System.out.print( c.getLabel() + "\t\t" );
+			afficher( c.getLabel() + "", 5 );
+			afficherTab();
 		}
 		System.out.print( "\n" );
 		System.out.print( "-----------------------------------------------------------------------------\n" );
@@ -79,7 +80,8 @@ public class DataFrame {
 		System.out.print("Ligne\t\t");
 		for( int i = start; i < end; i++  )
 		{
-			System.out.print( this.getColonnes().get( i ).getLabel() + "\t\t" );
+			afficher( this.getColonnes().get( i ).getLabel() + "", 5 );
+			afficherTab();
 		}
 		System.out.print( "\n" );
 		System.out.print( "----------------------------------------------------------------------\n" );
@@ -97,7 +99,8 @@ public class DataFrame {
             System.out.print(numLigne+"\t\t");
             for( Colonne c : this.getColonnes() )
             {
-                System.out.print( c.getCellules().get( numLigne ).getValue() + "\t\t" );
+                afficher( c.getCellules().get( numLigne ).getValue() + "", 5 );
+                afficherTab();
             }
             System.out.println();
         }
@@ -150,8 +153,8 @@ public class DataFrame {
 				System.out.print( i + "\t\t");
 				for( Colonne c : this.getColonnes() )
 				{
-						System.out.print( c.getCellules().get( i ).getValue() + "\t\t" );
-					
+					afficher( c.getCellules().get( i ).getValue() + "", 5 );
+					afficherTab();
 				}
 				System.out.print("\n");
 			}
@@ -178,10 +181,33 @@ public class DataFrame {
 				//System.out.print( this.getColonnes().get( i ).getLabel() );
 				for( int j = start; j < end; j++ )
 				{
-					System.out.print( this.getColonnes().get(j).getCellules().get(i).getValue() + "\t\t");
+					afficher( this.getColonnes().get(j).getCellules().get(i).getValue() + "", 5);
+					afficherTab();
 				}
 				System.out.print("\n");
 			}
+		}
+	}
+	
+	
+	/***
+	 * Afficher Tabulations
+	 */
+	public void afficherTab()
+	{
+		System.out.print( "\t\t" );
+	}
+	
+    /**
+     * Fonction qui limite la taille du mot affiché
+     *
+     * @param msg Message à afficher
+     * @param limit Nombre de caractères maximale à afficher
+     */
+	public void afficher(String msg, int limit){
+		System.out.print(msg.substring(0, Math.min(limit, msg.length())));
+		if (msg.length() > limit){
+			System.out.print("..");
 		}
 	}
 	
