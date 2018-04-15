@@ -11,6 +11,10 @@ An awesome project for the devops course
   - Maxence Guillot
 
 ## Choix des outils
+- JUnit
+- GitHub pour la gestion du repo Git
+- Travis-ci pour l'intégration continue
+- Maven pour les test
 
 ## Fonctionnalités implémentées
 
