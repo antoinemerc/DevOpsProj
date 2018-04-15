@@ -4,47 +4,49 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Map;
-
+import java.util.Arrays;
 import com.sun.org.apache.bcel.internal.generic.Type;
 
-import sun.corba.OutputStreamFactory;
+import exceptions.CsvMissingComaException;
+import exceptions.CsvParsingException;
 
+/**
+ * Un parser CSV pour custom DataFrame
+ * @author Antoine
+ *
+ */
 public class ParserCsv {
 
-	private String fileName = "";
-	private BufferedReader br = null;
-	private DataFrame df = null;
+	private String fileName = "";	
 	
 	private int nbrColumn = 0;
 	private int nbrLine = 0;
 
-	private String[] headerLine;
-
-	private Colonne[] headers;
-	private ArrayList<String[]> contentLine = new ArrayList<String[]>(); //contentLine[i][1]
+	private ArrayList<String> headerLine;
+	private ArrayList<ArrayList<String>> contentLine = new ArrayList<ArrayList<String>>(); //contentLine[i][1]
 
 	/**
-	 * 
+	 * Initialise le parsing d'un fichier CSV
 	 * @param fileName
 	 */
-	public ParserCsv(DataFrame df, String fileName) {
+	public ParserCsv(String fileName) {
 		this.fileName = fileName;
-		
+		System.out.println(fileName);
 		try {
-			this.br = new BufferedReader(new FileReader(fileName));
-			this.df = df;
-			this.convertCsvToStringArray();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			
+			BufferedReader br = new BufferedReader(new FileReader(this.fileName));			
+			this.convertCsvToArrayList(br);
+		
+		} catch (FileNotFoundException | CsvParsingException e) {
 			e.printStackTrace();
 		}	
 	}
 	
+	/**
+	 * Obtient le nom du fichier
+	 * @return nomdufichier.csv
+	 */
 	public String getName(){
 		String[] fullPath = fileName.split("/");
 		String fileWithExtension = fullPath[fullPath.length-1];
@@ -52,73 +54,128 @@ public class ParserCsv {
 		return fileWithExtension;
 	}
 	
+	/**
+	 * Convertis un arraylist de string vers un format compatible pour DataFrame
+	 * @return Un ArrayList de colonne adapté a un DataFrame
+	 */
+	public ArrayList<Colonne> getAllColumn(){
+		return 	this.convertArrayListToDataFrame();
+	}	
 	
 	/**
-	 * 
+	 * Convertis le flux de donnée en un ArrayList<String>
+	 * @param br Flux de donnée à convertir
+	 * @throws CsvParsingException
 	 */
-	public void convertCsvToStringArray(){
+	public void convertCsvToArrayList(BufferedReader br) throws CsvParsingException{
 		String line = ""; 
 		try {
-			this.headerLine = br.readLine().split(",");						
-			this.nbrColumn = headerLine.length;
+			this.headerLine = new ArrayList<String>(Arrays.asList(br.readLine().split(",")));						
+			this.nbrColumn = headerLine.size();
 			
 			while ((line = br.readLine()) != null) {
 				this.nbrLine++;
-			    String[] lineStr = line.split(",");
+				ArrayList<String> lineStr =  new ArrayList<String>(Arrays.asList(line.split(",")));
 			    this.contentLine.add(lineStr);
 			}
+			checkCsvValidity();
 			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (IOException | CsvMissingComaException | CsvParsingException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public ArrayList<Colonne> convertStringArrayToDataFrame(){
+	/**
+	 * Vérifie si il n'y a pas d'incohérence dans le fichier CSV
+	 * @throws CsvParsingException 
+	 * @throws CsvMissingComaException
+	 */
+	public void checkCsvValidity() throws CsvParsingException, CsvMissingComaException {
 		
-		String[] firstLine = this.contentLine.get(1);
+		for(int i = 0; i < this.contentLine.size(); i++){
+			
+			int lineSize =  this.contentLine.get(i).size();
+			
+			if(lineSize > nbrColumn) {
+				throw new CsvParsingException();
+			}
+		
+			if(lineSize < nbrColumn) {
+				throw new CsvMissingComaException();
+			}				
+		}
+			
+	}
+	
+	/**
+	 * Convertit les tableaux de string précédamment établit en un format adapté aux DataFrame 
+	 * @return Une liste de colonne adapté pour un DataFrame.addColonnes()
+	 */
+	public ArrayList<Colonne> convertArrayListToDataFrame(){
+		
+		ArrayList<String> firstLine = this.contentLine.get(1);
 		ArrayList<Colonne> colonnes = new ArrayList<Colonne>();
 		
-		for(int i = 0; i <= firstLine.length-1; i++ ){
+		for(int i = 0; i <= firstLine.size()-1; i++ ){
 			
-			Type typeColumn = guessTheType(firstLine[i]);
+			Type typeColumn = guessTheType(firstLine.get(i));
 			
 			//if a field is left blank look for the next one in the column to guess the type
 			int j = 1;
 			boolean remainUnknown = false;
 			while(typeColumn == Type.UNKNOWN || remainUnknown == true){
 				
-				String[] firstLineNext = this.contentLine.get(j++);
-				typeColumn = guessTheType(firstLineNext[i]);
+				ArrayList<String> firstLineNext = this.contentLine.get(j++);
+				typeColumn = guessTheType(firstLineNext.get(i));
 				
 				//if all field blank return unknown
 				if(j+1 == this.contentLine.size()){
 					remainUnknown = true;
 				}
 			}
-			Colonne col = new Colonne(this.headerLine[i], typeColumn, null);
+			Colonne col = new Colonne(this.headerLine.get(i), typeColumn, null);
 			colonnes.add(col);
 		}
 		
-		/*
-		for(Colonne c : colonnes){
-			System.out.println(c.getLabel()+","+c.getType().toString());
-		}*/
 		
 		//iterate for the number of column
 		for(int i = 0; i <= colonnes.size()-1; i++ ){
 			
 			Type typeColumn = colonnes.get(i).getType();
-			ArrayList<Cellule> cellsList = new ArrayList<Cellule>();
-
+			ArrayList<Cellule<?>> cellsList = new ArrayList<Cellule<?>>();
+			
 			//iterate for the number of line in the csv file (minus header)
 			for(int j = 0; j < this.nbrLine; j++){
-				if(typeColumn == Type.INT)
-					cellsList.add(new Cellule<Integer>(Integer.parseInt(this.contentLine.get(j)[i])));
-				if(typeColumn == Type.DOUBLE)
-					cellsList.add(new Cellule<Double>(Double.parseDouble(this.contentLine.get(j)[i])));
-				else if(typeColumn == Type.STRING)
-					cellsList.add(new Cellule<String>(this.contentLine.get(j)[i]));
+				boolean nullValue = false;
+
+				//special case if the value of a column is not filled
+				if(this.contentLine.get(j).get(i).trim().equals("") || this.contentLine.get(j).get(i).equals(null)) 
+					nullValue = true;
+				
+				if(typeColumn == Type.INT) {
+					
+					if(nullValue) {
+						cellsList.add(new Cellule<Integer>(null));
+					}else {
+						cellsList.add(new Cellule<Integer>(Integer.parseInt(this.contentLine.get(j).get(i))));
+					}
+					
+				}else if(typeColumn == Type.DOUBLE) {
+					
+					if(nullValue) {
+						cellsList.add(new Cellule<Integer>(null));
+					}else {
+						cellsList.add(new Cellule<Double>(Double.parseDouble(this.contentLine.get(j).get(i))));
+					}
+				
+				}else if(typeColumn == Type.STRING) {
+					
+					if(nullValue) {
+						cellsList.add(new Cellule<Integer>(null));
+					}else {
+						cellsList.add(new Cellule<String>(this.contentLine.get(j).get(i)));
+					}
+				}
 				
 				
 			}			
@@ -128,6 +185,11 @@ public class ParserCsv {
 		return colonnes;
 	}
 	
+	/**
+	 * Trouve et attribue un type a un string
+	 * @param value La valeur dont on doit trouver le type
+	 * @return le type du string
+	 */
 	public Type guessTheType(String value){
 		
 		Type ret = null;
@@ -144,13 +206,13 @@ public class ParserCsv {
 				switch (it){
 					case 0:
 						it++;
-						int testInt = Integer.parseInt(value);
+					Integer.parseInt(value);
 						ret = Type.INT;
 						done = true;
 						break;
 					case 1:
 						it++;
-						double testDouble = Double.parseDouble(value);
+					Double.parseDouble(value);
 						ret = Type.DOUBLE;
 						done = true;
 						break;
@@ -159,15 +221,11 @@ public class ParserCsv {
 						ret = Type.STRING;
 						done = true;		
 				}
-			}catch(Exception e){}
+			}catch(Exception e){
+				
+			}
 		}
 		
 		return ret;
-	}
-	
-	public ArrayList<Colonne> getAllColumn(){
-		return 	this.convertStringArrayToDataFrame();
-
-	}
-	
+	}	
 }

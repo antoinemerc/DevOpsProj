@@ -34,8 +34,6 @@ public class DataFrame {
 		this.colonnes = colonnes;
 	}
 	
-	
-
 	/**
      * Constructeur qui prend en paramêtre le contenu d'un fichier
      * CSV
@@ -43,11 +41,11 @@ public class DataFrame {
      * @param String - nom du fichier CSV
      */
 	public DataFrame(String csv){
-		/*ParserCsv parsing = new ParserCsv(this, csv);
+		ParserCsv parsing = new ParserCsv(csv);
 		this.name = parsing.getName();
-		this.colonnes = parsing.getAllColumn();*/
+		this.colonnes = parsing.getAllColumn();
 	}
-
+	
 	public ArrayList<Colonne> getColonnes() {
 		return colonnes;
 	}
@@ -168,7 +166,6 @@ public class DataFrame {
 		return this.getColonnes().size();
 	}
 	
-	
 	/***********************************************************/
 	/*** FUNCTIONS POUR SELECTIONNER DES LIGNES ET COLONNES ***/
 	/***********************************************************/
@@ -252,9 +249,6 @@ public class DataFrame {
 		}
 		return df;
 	}
-	
-	
-	
 	
 	/*********************************************************/
 	/*** FUNCTIONS POUR AFFICHER DES LIGNES ET COLONNES ******/
@@ -389,8 +383,6 @@ public class DataFrame {
 			this.afficherLignes( size - 3, size - 1 );
 	}
 	
-	
-	
 	/***
 	 * Afficher Tabulations
 	 */
@@ -513,5 +505,4 @@ public class DataFrame {
 		}
 		return max;
 	}
-	
 }

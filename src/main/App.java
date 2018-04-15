@@ -1,6 +1,5 @@
 package main;
 
-import java.nio.channels.SelectableChannel;
 import java.util.ArrayList;
 
 import com.sun.org.apache.bcel.internal.generic.Type;
@@ -11,26 +10,37 @@ import com.sun.org.apache.bcel.internal.generic.Type;
  */
 public class App 
 {
-	
-	public static int executionMode = 1;
-	
+		
     public static void main( String[] args ) throws Exception
     {
+    	DataFrame dataFrame = null;
+    	int executionMode = 0;
+    	
     	if(executionMode == 0){
-			DataFrame df = new DataFrame("test.csv");
-	    	df.afficherTout();
+    		
+    		dataFrame = new DataFrame("test.csv");    		
+    		dataFrame.afficherTout();                       
+            dataFrame.afficherPremieresLignes();
+            dataFrame.selectLignes(0, 2).afficherDernieresLignes();
+            
+            System.out.println("Moyenne des populations : " + dataFrame.calculerMoyenne("age"));
+            System.out.println("Population minimale : " + dataFrame.calculerMinimum("age"));
+            System.out.println("Population maximale : " + dataFrame.calculerMaximum("age"));
+            
     	}else{
     	
 	        // Premier DataFrame de test avec le 1er constructeur
-	    	ArrayList<Cellule> colonne01 = new ArrayList<>();
-	    	ArrayList<Cellule> colonne02 = new ArrayList<>();
-	    	ArrayList<Cellule> colonne03 = new ArrayList<>();
+	    	ArrayList<Cellule<?>> colonne01 = new ArrayList<>();
+	    	ArrayList<Cellule<?>> colonne02 = new ArrayList<>();
+	    	ArrayList<Cellule<?>> colonne03 = new ArrayList<>();
 	
 	        ArrayList<Colonne> colonnes = new ArrayList<>();
+	        
 	        colonnes.add(new Colonne("Pays", Type.getType("String"), colonne01));
 	        colonnes.add(new Colonne("Population", Type.getType("Integer"), colonne02));
 	        colonnes.add(new Colonne("Département", Type.getType("String"), colonne03));
-	        DataFrame dataFrame = new DataFrame("Villes de France", colonnes);
+	        
+	        dataFrame = new DataFrame("Villes de France", colonnes);
 	        
 	        // Données
 	        colonne01.add(new Cellule<String>("Paris"));
@@ -53,7 +63,7 @@ public class App
 	        
 	        dataFrame.afficherTout();
 	        dataFrame.afficherPremieresLignes();
-	        dataFrame.selectLignes(0, 4).afficherDernieresLignes();
+	        dataFrame.selectLignes(0, 2).afficherDernieresLignes();
 	        
 	        System.out.println("Moyenne des populations : " + dataFrame.calculerMoyenne("Population"));
 	        System.out.println("Population minimale : " + dataFrame.calculerMinimum("Population"));

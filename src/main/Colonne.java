@@ -8,7 +8,7 @@ public class Colonne {
 	
 	private String label;
 	private Type type;
-	private ArrayList<Cellule> cellules;
+	private ArrayList<Cellule<?>> cellules;
 
 	/***
 	 * 
@@ -19,7 +19,7 @@ public class Colonne {
 	{
 		this.setLabel( label );
 		this.setType( type );
-		this.setCellules( new ArrayList<Cellule>() );
+		this.setCellules( new ArrayList<Cellule<?>>() );
 	}
 	
 	/***
@@ -28,13 +28,11 @@ public class Colonne {
 	 * @param type
 	 * @param cellules
 	 */
-	public Colonne(String label, Type type, ArrayList<Cellule> cellules){
+	public Colonne(String label, Type type, ArrayList<Cellule<?>> cellules){
 		this.label = label;
 		this.type = type;
 		this.cellules = cellules;
-	}
-
-	
+	}	
 
 	public String getLabel() {
 		return label;
@@ -52,12 +50,12 @@ public class Colonne {
 		this.type = type;
 	}
 
-	public ArrayList<Cellule> getCellules() {
+	public ArrayList<Cellule<?>> getCellules() {
 		return cellules;
 	}
 
-	public void setCellules(ArrayList<Cellule> cellules) {
-		this.cellules = cellules;
+	public void setCellules(ArrayList<Cellule<?>> arrayList) {
+		this.cellules = arrayList;
 	}
 	
 	public boolean equals(Object obj){
@@ -76,6 +74,4 @@ public class Colonne {
 		}
 		return true;
 	}
-	
-	
 }

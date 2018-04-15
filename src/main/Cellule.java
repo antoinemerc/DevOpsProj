@@ -20,7 +20,7 @@ public class Cellule<E> {
 		if (obj == null || getClass() != obj.getClass()){
 			return false;
 		}
-		Cellule cellule2 = (Cellule)obj;
+		Cellule<?> cellule2 = (Cellule<?>)obj;
 		if (this.getValue().equals(cellule2.getValue())){
 			return true;
 		}

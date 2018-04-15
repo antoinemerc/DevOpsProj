@@ -1,4 +1,5 @@
-nom,prenom,poids,age
-Mercier,Antoine,65,21
-Beaubois,Max,5,21
-Pablo,Juan,150,5
+nom,prenom,poids,age, Type Sang
+Mercier,Antoine,,21,o+
+Beaubois,Max,50,21,o-
+Pablo,Juan,150,22,ab
+pp,Maxence,150,10,a
