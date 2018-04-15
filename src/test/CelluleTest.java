@@ -11,7 +11,7 @@ import java.util.ArrayList;
 /**
  * Unit test for simple App.
  */
-public class AppTest 
+public class CelluleTest 
     extends TestCase
 {
     /**
@@ -19,7 +19,7 @@ public class AppTest
      *
      * @param testName name of the test case
      */
-    public AppTest( String testName )
+    public CelluleTest( String testName )
     { 
     		super( testName );
     }
@@ -37,10 +37,7 @@ public class AppTest
      */
     public void testApp()
     {
-    		ColonneTest test1 = new ColonneTest("testCreateColonne");
-        
-        test1.run();
         assertTrue( true );
     }
-    
 }
+  
