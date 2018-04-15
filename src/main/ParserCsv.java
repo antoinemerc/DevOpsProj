@@ -143,7 +143,7 @@ public class ParserCsv {
 			
 			Type typeColumn = colonnes.get(i).getType();
 			ArrayList<Cellule<?>> cellsList = new ArrayList<Cellule<?>>();
-			
+
 			//iterate for the number of line in the csv file (minus header)
 			for(int j = 0; j < this.nbrLine; j++){
 				boolean nullValue = false;
@@ -206,13 +206,13 @@ public class ParserCsv {
 				switch (it){
 					case 0:
 						it++;
-					Integer.parseInt(value);
+						Integer.parseInt(value);
 						ret = Type.INT;
 						done = true;
 						break;
 					case 1:
 						it++;
-					Double.parseDouble(value);
+						Double.parseDouble(value);
 						ret = Type.DOUBLE;
 						done = true;
 						break;
